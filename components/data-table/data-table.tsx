@@ -65,6 +65,8 @@ export function DataTable<T extends Record<string, any>>({
     }
 
     if (
+      aValue !== null &&
+      bValue !== null &&
       typeof aValue === "object" &&
       typeof bValue === "object" &&
       aValue instanceof Date &&
