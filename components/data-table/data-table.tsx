@@ -64,17 +64,14 @@ export function DataTable<T extends Record<string, any>>({
       return sortDirection === "asc" ? aValue - bValue : bValue - aValue
     }
 
-    if (
-      aValue &&
-      bValue &&
-      typeof aValue === "object" &&
-      typeof bValue === "object" &&
-      aValue instanceof Date &&
-      bValue instanceof Date
-    ) {
+    // Check for Date objects
+    const isADate = aValue !== null && typeof aValue === "object" && aValue instanceof Date
+    const isBDate = bValue !== null && typeof bValue === "object" && bValue instanceof Date
+
+    if (isADate && isBDate) {
       return sortDirection === "asc"
-        ? aValue.getTime() - bValue.getTime()
-        : bValue.getTime() - aValue.getTime()
+        ? (aValue as Date).getTime() - (bValue as Date).getTime()
+        : (bValue as Date).getTime() - (aValue as Date).getTime()
     }
 
     return 0
