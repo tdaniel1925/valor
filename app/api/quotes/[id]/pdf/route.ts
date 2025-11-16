@@ -58,7 +58,7 @@ export async function GET(
     })
 
     // Return PDF
-    return new NextResponse(pdfBuffer, {
+    return new NextResponse(pdfBuffer.buffer as ArrayBuffer, {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename="quote-${quote.quoteNumber || quote.id}.pdf"`,
