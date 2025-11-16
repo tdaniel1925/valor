@@ -5,7 +5,7 @@ import { quotes, cases } from "@/db/schema"
 import { eq } from "drizzle-orm"
 import { ensureUserExists } from "@/lib/user-helpers"
 import { logQuoteConverted, logCaseCreated } from "@/lib/activity-log"
-import { createSuccessResponse, createErrorResponse } from "@/lib/api/response"
+import { successResponse, unauthorizedResponse, notFoundResponse, forbiddenResponse } from "@/lib/api/response"
 import { handleApiError } from "@/lib/api/error-handler"
 
 export async function POST(
@@ -19,7 +19,7 @@ export async function POST(
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return createErrorResponse("Unauthorized", 401)
+      return unauthorizedResponse()
     }
 
     const dbUser = await ensureUserExists(user.id, user.email!)
@@ -31,12 +31,12 @@ export async function POST(
       .where(eq(quotes.id, params.id))
 
     if (!quote) {
-      return createErrorResponse("Quote not found", 404)
+      return notFoundResponse("Quote not found")
     }
 
     // Check ownership
     if (quote.agentId !== dbUser.id) {
-      return createErrorResponse("Forbidden", 403)
+      return forbiddenResponse()
     }
 
     // Create case from quote
@@ -58,7 +58,7 @@ export async function POST(
     await logQuoteConverted(user.id, params.id, newCase.id)
     await logCaseCreated(user.id, newCase.id)
 
-    return createSuccessResponse({
+    return successResponse({
       case: newCase,
       quoteId: params.id,
     })

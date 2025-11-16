@@ -5,7 +5,7 @@ import { quotes } from "@/db/schema"
 import { eq } from "drizzle-orm"
 import { ensureUserExists } from "@/lib/user-helpers"
 import { logQuoteCreated } from "@/lib/activity-log"
-import { createSuccessResponse, createErrorResponse } from "@/lib/api/response"
+import { successResponse, unauthorizedResponse, errorResponse, notFoundResponse } from "@/lib/api/response"
 import { handleApiError } from "@/lib/api/error-handler"
 import { processBatch } from "@/lib/utils/batch-helpers"
 
@@ -17,18 +17,18 @@ export async function PATCH(request: NextRequest) {
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return createErrorResponse("Unauthorized", 401)
+      return unauthorizedResponse()
     }
 
     const dbUser = await ensureUserExists(user.id, user.email!)
     const { quoteIds, updates } = await request.json()
 
     if (!quoteIds || !Array.isArray(quoteIds) || quoteIds.length === 0) {
-      return createErrorResponse("quoteIds array is required", 400)
+      return errorResponse("Bad Request", "quoteIds array is required", undefined, 400)
     }
 
     if (!updates || typeof updates !== "object") {
-      return createErrorResponse("updates object is required", 400)
+      return errorResponse("Bad Request", "updates object is required", undefined, 400)
     }
 
     // Validate all quotes belong to user
@@ -42,7 +42,7 @@ export async function PATCH(request: NextRequest) {
       .filter((id) => quoteIds.includes(id))
 
     if (validQuoteIds.length === 0) {
-      return createErrorResponse("No valid quotes found", 404)
+      return notFoundResponse("No valid quotes found")
     }
 
     // Process updates in batches
@@ -63,7 +63,7 @@ export async function PATCH(request: NextRequest) {
       10
     )
 
-    return createSuccessResponse({
+    return successResponse({
       updated: results.length,
       quotes: results,
     })
@@ -80,14 +80,14 @@ export async function DELETE(request: NextRequest) {
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return createErrorResponse("Unauthorized", 401)
+      return unauthorizedResponse()
     }
 
     const dbUser = await ensureUserExists(user.id, user.email!)
     const { quoteIds } = await request.json()
 
     if (!quoteIds || !Array.isArray(quoteIds) || quoteIds.length === 0) {
-      return createErrorResponse("quoteIds array is required", 400)
+      return errorResponse("Bad Request", "quoteIds array is required", undefined, 400)
     }
 
     // Validate all quotes belong to user
@@ -101,7 +101,7 @@ export async function DELETE(request: NextRequest) {
       .filter((id) => quoteIds.includes(id))
 
     if (validQuoteIds.length === 0) {
-      return createErrorResponse("No valid quotes found", 404)
+      return notFoundResponse("No valid quotes found")
     }
 
     // Delete quotes in batches
@@ -113,7 +113,7 @@ export async function DELETE(request: NextRequest) {
       10
     )
 
-    return createSuccessResponse({
+    return successResponse({
       deleted: validQuoteIds.length,
     })
   } catch (error) {
