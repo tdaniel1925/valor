@@ -5,7 +5,7 @@ import { quotes } from "@/db/schema"
 import { eq } from "drizzle-orm"
 import { ensureUserExists } from "@/lib/user-helpers"
 import { generateQuotePDF } from "@/lib/pdf/pdf-generator"
-import { createSuccessResponse, createErrorResponse } from "@/lib/api/response"
+import { successResponse, errorResponse } from "@/lib/api/response"
 import { handleApiError } from "@/lib/api/error-handler"
 
 export async function GET(
@@ -19,7 +19,7 @@ export async function GET(
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return createErrorResponse("Unauthorized", 401)
+      return errorResponse("Unauthorized", undefined, undefined, 401)
     }
 
     const dbUser = await ensureUserExists(user.id, user.email!)
@@ -31,12 +31,12 @@ export async function GET(
       .where(eq(quotes.id, params.id))
 
     if (!quote) {
-      return createErrorResponse("Quote not found", 404)
+      return errorResponse("Quote not found", undefined, undefined, 404)
     }
 
     // Check ownership
     if (quote.agentId !== dbUser.id) {
-      return createErrorResponse("Forbidden", 403)
+      return errorResponse("Forbidden", undefined, undefined, 403)
     }
 
     // Extract client data

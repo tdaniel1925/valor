@@ -5,7 +5,7 @@ import { cases } from "@/db/schema"
 import { inArray, eq } from "drizzle-orm"
 import { ensureUserExists } from "@/lib/user-helpers"
 import { logCaseUpdated } from "@/lib/activity-log"
-import { createSuccessResponse, createErrorResponse } from "@/lib/api/response"
+import { successResponse, errorResponse } from "@/lib/api/response"
 import { handleApiError } from "@/lib/api/error-handler"
 import { processBatch } from "@/lib/utils/batch-helpers"
 
@@ -17,18 +17,18 @@ export async function PATCH(request: NextRequest) {
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return createErrorResponse("Unauthorized", 401)
+      return errorResponse("Unauthorized", undefined, undefined, 401)
     }
 
     const dbUser = await ensureUserExists(user.id, user.email!)
     const { caseIds, updates } = await request.json()
 
     if (!caseIds || !Array.isArray(caseIds) || caseIds.length === 0) {
-      return createErrorResponse("caseIds array is required", 400)
+      return errorResponse("caseIds array is required", undefined, undefined, 400)
     }
 
     if (!updates || typeof updates !== "object") {
-      return createErrorResponse("updates object is required", 400)
+      return errorResponse("updates object is required", undefined, undefined, 400)
     }
 
     // Validate all cases belong to user
@@ -42,7 +42,7 @@ export async function PATCH(request: NextRequest) {
       .filter((id) => caseIds.includes(id))
 
     if (validCaseIds.length === 0) {
-      return createErrorResponse("No valid cases found", 404)
+      return errorResponse("No valid cases found", undefined, undefined, 404)
     }
 
     // Process updates in batches
@@ -69,7 +69,7 @@ export async function PATCH(request: NextRequest) {
       10 // Process 10 at a time
     )
 
-    return createSuccessResponse({
+    return successResponse({
       updated: results.length,
       cases: results,
     })
@@ -86,14 +86,14 @@ export async function DELETE(request: NextRequest) {
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return createErrorResponse("Unauthorized", 401)
+      return errorResponse("Unauthorized", undefined, undefined, 401)
     }
 
     const dbUser = await ensureUserExists(user.id, user.email!)
     const { caseIds } = await request.json()
 
     if (!caseIds || !Array.isArray(caseIds) || caseIds.length === 0) {
-      return createErrorResponse("caseIds array is required", 400)
+      return errorResponse("caseIds array is required", undefined, undefined, 400)
     }
 
     // Validate all cases belong to user
@@ -107,7 +107,7 @@ export async function DELETE(request: NextRequest) {
       .filter((id) => caseIds.includes(id))
 
     if (validCaseIds.length === 0) {
-      return createErrorResponse("No valid cases found", 404)
+      return errorResponse("No valid cases found", undefined, undefined, 404)
     }
 
     // Delete cases in batches
@@ -119,7 +119,7 @@ export async function DELETE(request: NextRequest) {
       10
     )
 
-    return createSuccessResponse({
+    return successResponse({
       deleted: validCaseIds.length,
     })
   } catch (error) {
