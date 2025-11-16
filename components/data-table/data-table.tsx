@@ -137,7 +137,7 @@ export function DataTable<T extends Record<string, any>>({
                   </td>
                 ))}
               </tr>
-            ))}
+            ))
           )}
         </tbody>
       </table>
