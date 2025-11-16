@@ -62,7 +62,7 @@ export function partition<T>(
  */
 export function flatten<T>(array: (T | T[])[]): T[] {
   return array.reduce((acc, item) => {
-    return acc.concat(Array.isArray(item) ? flatten(item) : item)
+    return acc.concat(Array.isArray(item) ? flatten(item) : [item])
   }, [] as T[])
 }
 
