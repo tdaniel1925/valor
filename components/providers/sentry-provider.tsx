@@ -1,10 +1,10 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, Suspense } from "react"
 import * as Sentry from "@sentry/nextjs"
 import { usePathname, useSearchParams } from "next/navigation"
 
-export function SentryProvider({ children }: { children: React.ReactNode }) {
+function SentryTracker() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
@@ -14,6 +14,17 @@ export function SentryProvider({ children }: { children: React.ReactNode }) {
     }
   }, [pathname, searchParams])
 
-  return <>{children}</>
+  return null
+}
+
+export function SentryProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <Suspense fallback={null}>
+        <SentryTracker />
+      </Suspense>
+      {children}
+    </>
+  )
 }
 

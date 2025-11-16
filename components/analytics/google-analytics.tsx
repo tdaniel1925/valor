@@ -1,11 +1,11 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, Suspense } from "react"
 import Script from "next/script"
 import { usePathname, useSearchParams } from "next/navigation"
 import { trackPageView } from "@/lib/analytics/analytics"
 
-export function GoogleAnalytics() {
+function GoogleAnalyticsScript() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const gaId = process.env.NEXT_PUBLIC_GA_ID
@@ -42,6 +42,14 @@ export function GoogleAnalytics() {
         }}
       />
     </>
+  )
+}
+
+export function GoogleAnalytics() {
+  return (
+    <Suspense fallback={null}>
+      <GoogleAnalyticsScript />
+    </Suspense>
   )
 }
 
