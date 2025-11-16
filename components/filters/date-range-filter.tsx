@@ -42,11 +42,11 @@ export function DateRangeFilter({ onDateRangeChange, className }: DateRangeFilte
             variant="outline"
             className={cn(
               "w-[300px] justify-start text-left font-normal",
-              !dateRange.from && "text-muted-foreground"
+              !dateRange?.from && "text-muted-foreground"
             )}
           >
             <Calendar className="mr-2 h-4 w-4" />
-            {dateRange.from ? (
+            {dateRange?.from ? (
               dateRange.to ? (
                 <>
                   {format(dateRange.from, "LLL dd, y")} -{" "}
@@ -70,7 +70,7 @@ export function DateRangeFilter({ onDateRangeChange, className }: DateRangeFilte
           />
         </PopoverContent>
       </Popover>
-      {(dateRange.from || dateRange.to) && (
+      {(dateRange?.from || dateRange?.to) && (
         <Button
           variant="ghost"
           size="sm"
