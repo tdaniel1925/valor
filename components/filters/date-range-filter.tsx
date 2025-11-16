@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Calendar } from "lucide-react"
 import { format } from "date-fns"
+import type { DateRange } from "react-day-picker"
 import { Button } from "@/components/ui/button"
 import { Calendar as CalendarComponent } from "@/components/ui/calendar"
 import {
@@ -19,17 +20,14 @@ interface DateRangeFilterProps {
 }
 
 export function DateRangeFilter({ onDateRangeChange, className }: DateRangeFilterProps) {
-  const [dateRange, setDateRange] = useState<{
-    from: Date | undefined
-    to: Date | undefined
-  }>({
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: undefined,
     to: undefined,
   })
 
-  const handleDateSelect = (range: { from: Date | undefined; to: Date | undefined }) => {
+  const handleDateSelect = (range: DateRange | undefined) => {
     setDateRange(range)
-    onDateRangeChange(range)
+    onDateRangeChange(range || { from: undefined, to: undefined })
   }
 
   return (
