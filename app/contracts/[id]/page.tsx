@@ -11,8 +11,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 export default async function ContractDetailPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
+  const { id } = await params
   const supabase = await createClient()
   const {
     data: { user: authUser },
@@ -30,7 +31,7 @@ export default async function ContractDetailPage({
   const [contract] = await db
     .select()
     .from(contracts)
-    .where(eq(contracts.id, params.id))
+    .where(eq(contracts.id, id))
     .limit(1)
 
   if (!contract) {

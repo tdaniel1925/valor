@@ -12,8 +12,9 @@ import { CaseNotes } from "@/components/cases/case-notes"
 export default async function CaseDetailPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
+  const { id } = await params
   const supabase = await createClient()
   const {
     data: { user: authUser },
@@ -31,7 +32,7 @@ export default async function CaseDetailPage({
   const [caseItem] = await db
     .select()
     .from(cases)
-    .where(eq(cases.id, params.id))
+    .where(eq(cases.id, id))
     .limit(1)
 
   if (!caseItem) {

@@ -11,8 +11,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 export default async function UserDetailPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
+  const { id } = await params
   const supabase = await createClient()
   const {
     data: { user: authUser },
@@ -30,7 +31,7 @@ export default async function UserDetailPage({
   const [user] = await db
     .select()
     .from(users)
-    .where(eq(users.id, params.id))
+    .where(eq(users.id, id))
     .limit(1)
 
   if (!user) {

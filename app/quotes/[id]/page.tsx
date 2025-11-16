@@ -12,8 +12,9 @@ import { ConvertToCase } from "@/components/quotes/convert-to-case"
 export default async function QuoteDetailPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
+  const { id } = await params
   const supabase = await createClient()
   const {
     data: { user: authUser },
@@ -31,7 +32,7 @@ export default async function QuoteDetailPage({
   const [quote] = await db
     .select()
     .from(quotes)
-    .where(eq(quotes.id, params.id))
+    .where(eq(quotes.id, id))
     .limit(1)
 
   if (!quote) {

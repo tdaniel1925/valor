@@ -9,8 +9,9 @@ import { CaseForm } from "@/components/cases/case-form"
 export default async function EditCasePage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
+  const { id } = await params
   const supabase = await createClient()
   const {
     data: { user },
@@ -28,7 +29,7 @@ export default async function EditCasePage({
   const [caseItem] = await db
     .select()
     .from(cases)
-    .where(eq(cases.id, params.id))
+    .where(eq(cases.id, id))
     .limit(1)
 
   if (!caseItem) {
