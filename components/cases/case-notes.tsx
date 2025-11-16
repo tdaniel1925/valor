@@ -35,10 +35,6 @@ export function CaseNotes({ caseId }: CaseNotesProps) {
   })
   const [submitting, setSubmitting] = useState(false)
 
-  useEffect(() => {
-    fetchNotes()
-  }, [caseId])
-
   const fetchNotes = async () => {
     try {
       const response = await fetch(`/api/cases/${caseId}/notes`)
@@ -52,6 +48,11 @@ export function CaseNotes({ caseId }: CaseNotesProps) {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    fetchNotes()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [caseId])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
