@@ -31,11 +31,12 @@ export default function LoginPage() {
       setError(error.message)
       setLoading(false)
     } else if (data.user) {
-      // Wait a moment for the session to be properly set
-      await new Promise(resolve => setTimeout(resolve, 100))
-
+      // Get redirect path
       const redirectTo = searchParams.get("redirectedFrom") || "/dashboard"
-      window.location.href = redirectTo // Use hard navigation to ensure cookies are sent
+
+      // Use Next.js router for proper navigation and cookie handling
+      router.push(redirectTo)
+      router.refresh() // Refresh server components to pick up new auth state
     }
   }
 
