@@ -24,7 +24,7 @@ export default async function ContractsPage() {
       <div className="container py-10">
         <h1 className="text-2xl font-bold">Access Denied</h1>
         <p className="mt-2 text-muted-foreground">
-          You don't have permission to view contracts.
+          You don&apos;t have permission to view contracts.
         </p>
       </div>
     )
