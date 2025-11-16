@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run dev:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)",
+      "Bash(npm install:*)",
+      "Bash(timeout /t 3 /nobreak)",
+      "Bash(nul)",
+      "Bash(powershell -Command \"Start-Sleep -Seconds 3; npm install tailwindcss-animate\")",
+      "Bash(powershell -Command \"Start-Sleep -Seconds 2; npm install tailwindcss-animate\")",
+      "Bash(tasklist:*)",
+      "Bash(node --max-http-header-size=16384 node_modules/next/dist/bin/next dev:*)",
+      "Bash(timeout /t 2 /nobreak)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nInitial commit: Valor Financial Specialists Insurance Platform\n\n- Next.js 14 application with TypeScript\n- Supabase authentication and database integration\n- Dashboard with cases, quotes, and commissions tracking\n- Simplified auth flow using Supabase SSR\n- Security headers and middleware configuration\n- Tailwind CSS and shadcn/ui components\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(del nul 2)",
+      "Bash(NUL)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
