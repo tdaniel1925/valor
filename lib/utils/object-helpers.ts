@@ -33,7 +33,7 @@ export function deepMerge<T extends Record<string, any>>(
     for (const key in source) {
       if (isObject(source[key])) {
         if (!target[key]) Object.assign(target, { [key]: {} })
-        deepMerge(target[key], source[key])
+        deepMerge(target[key], source[key] as Partial<T[Extract<keyof T, string>]>)
       } else {
         Object.assign(target, { [key]: source[key] })
       }
@@ -50,7 +50,7 @@ function isObject(item: any): boolean {
 /**
  * Picks specific keys from an object
  */
-export function pick<T, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
+export function pick<T extends object, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
   const result = {} as Pick<T, K>
   keys.forEach((key) => {
     if (key in obj) {
