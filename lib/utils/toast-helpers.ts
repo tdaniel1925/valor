@@ -24,3 +24,11 @@ export function showInfo(message: string, title?: string) {
   })
 }
 
+export function showWarning(message: string, title?: string) {
+  toast({
+    variant: "destructive",
+    title: title || "Warning",
+    description: message,
+  })
+}
+

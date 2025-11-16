@@ -14,9 +14,8 @@ export async function hasPermission(
   if (!user) return false
 
   const permissions = await getUserPermissions(user.id)
-  return permissions.some(
-    (p) => p.resource === resource && p.action === action
-  )
+  // Check for specific permission in the Set (format: "resource:action")
+  return permissions.has(`${resource}:${action}`) || permissions.has(`${resource}:admin`)
 }
 
 /**

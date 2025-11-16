@@ -2,7 +2,7 @@
 // Install: npm install puppeteer
 // For production, consider using @sparticuz/chromium for serverless
 
-import puppeteer from "puppeteer"
+import puppeteer, { type Browser } from "puppeteer"
 
 interface PDFOptions {
   format?: "A4" | "Letter" | "Legal"
@@ -25,7 +25,7 @@ export async function generatePDFFromHTML(
   html: string,
   options: PDFOptions = {}
 ): Promise<Buffer> {
-  let browser: puppeteer.Browser | null = null
+  let browser: Browser | null = null
 
   try {
     // Launch browser
@@ -72,7 +72,7 @@ export async function generatePDFFromURL(
   url: string,
   options: PDFOptions = {}
 ): Promise<Buffer> {
-  let browser: puppeteer.Browser | null = null
+  let browser: Browser | null = null
 
   try {
     browser = await puppeteer.launch({

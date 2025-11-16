@@ -77,7 +77,7 @@ export function formatRelativeTime(date: Date | string): string {
   if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`
   if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`
 
-  return formatDate(date)
+  return formatDateShort(date)
 }
 
 /**

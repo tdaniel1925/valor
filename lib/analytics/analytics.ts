@@ -5,6 +5,7 @@ declare global {
   interface Window {
     gtag?: (...args: any[]) => void
     plausible?: (...args: any[]) => void
+    dataLayer?: any[]
   }
 }
 

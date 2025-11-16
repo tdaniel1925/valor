@@ -52,7 +52,7 @@ export async function sendEmail(options: SendEmailOptions): Promise<{ success: b
       subject: options.subject,
       html: html,
       text: text,
-      replyTo: options.replyTo,
+      reply_to: options.replyTo,
       cc: options.cc ? (Array.isArray(options.cc) ? options.cc : [options.cc]) : undefined,
       bcc: options.bcc ? (Array.isArray(options.bcc) ? options.bcc : [options.bcc]) : undefined,
       attachments: options.attachments?.map((att) => ({

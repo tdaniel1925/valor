@@ -21,9 +21,10 @@ export function useKeyPress(
   useEffect(() => {
     if (!enabled) return
 
-    const handleKeyPress = (event: KeyboardEvent) => {
-      if (keys.includes(event.key) || keys.includes(event.code)) {
-        handler(event)
+    const handleKeyPress = (event: Event) => {
+      const keyboardEvent = event as KeyboardEvent
+      if (keys.includes(keyboardEvent.key) || keys.includes(keyboardEvent.code)) {
+        handler(keyboardEvent)
       }
     }
 

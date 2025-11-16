@@ -30,12 +30,14 @@ export async function saveQuotePDF(
 ): Promise<string> {
   // Upload PDF to Supabase Storage
   const { uploadFile, getPublicUrl, STORAGE_BUCKETS } = await import("@/lib/supabase/storage")
-  
+
   const fileName = `quotes/${quoteId}/${Date.now()}.pdf`
-  await uploadFile(STORAGE_BUCKETS.quotes, fileName, pdfBuffer, {
+  // Convert Buffer to Blob for uploadFile
+  const pdfBlob = new Blob([pdfBuffer], { type: "application/pdf" })
+  await uploadFile(STORAGE_BUCKETS.quotes, fileName, pdfBlob, {
     contentType: "application/pdf",
   })
-  
+
   return getPublicUrl(STORAGE_BUCKETS.quotes, fileName)
 }
 
