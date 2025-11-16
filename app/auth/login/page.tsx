@@ -21,11 +21,13 @@ export default function LoginPage() {
 
     const result = await loginAction(formData)
 
-    if (result?.error) {
+    if (result.success) {
+      // Force a full page reload to ensure cookies are sent with the request
+      window.location.href = "/dashboard"
+    } else if (result.error) {
       setError(result.error)
       setLoading(false)
     }
-    // If successful, the server action will redirect to dashboard
   }
 
   const handleGoogleLogin = async () => {

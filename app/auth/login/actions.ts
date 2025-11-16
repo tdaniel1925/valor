@@ -1,14 +1,14 @@
 "use server"
 
 import { createClient } from "@/lib/supabase/server"
-import { redirect } from "next/navigation"
+import { revalidatePath } from "next/cache"
 
 export async function loginAction(formData: FormData) {
   const email = formData.get("email") as string
   const password = formData.get("password") as string
 
   if (!email || !password) {
-    return { error: "Email and password are required" }
+    return { success: false, error: "Email and password are required" }
   }
 
   const supabase = await createClient()
@@ -19,9 +19,12 @@ export async function loginAction(formData: FormData) {
   })
 
   if (error) {
-    return { error: error.message }
+    return { success: false, error: error.message }
   }
 
-  // Server-side redirect after successful authentication
-  redirect("/dashboard")
+  // Revalidate the dashboard path to ensure fresh data after login
+  revalidatePath("/dashboard")
+
+  // Return success - client will handle redirect
+  return { success: true }
 }
