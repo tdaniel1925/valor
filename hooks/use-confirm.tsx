@@ -49,20 +49,23 @@ export function useConfirm() {
     setState({ open: false, options: null, resolve: null })
   }, [state])
 
-  const ConfirmComponent = state.options ? (
-    <ConfirmDialog
-      open={state.open}
-      onOpenChange={(open) => {
-        if (!open) handleCancel()
-      }}
-      title={state.options.title}
-      description={state.options.description}
-      confirmLabel={state.options.confirmLabel}
-      cancelLabel={state.options.cancelLabel}
-      variant={state.options.variant}
-      onConfirm={handleConfirm}
-    />
-  ) : null
+  const ConfirmComponent = () => {
+    if (!state.options) return null
+    return (
+      <ConfirmDialog
+        open={state.open}
+        onOpenChange={(open) => {
+          if (!open) handleCancel()
+        }}
+        title={state.options.title}
+        description={state.options.description}
+        confirmLabel={state.options.confirmLabel}
+        cancelLabel={state.options.cancelLabel}
+        variant={state.options.variant}
+        onConfirm={handleConfirm}
+      />
+    )
+  }
 
   return {
     confirm,

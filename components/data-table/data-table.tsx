@@ -91,26 +91,28 @@ export function DataTable<T extends Record<string, any>>({
       <table className="w-full">
         <thead>
           <tr className="border-b bg-muted/50">
-            {columns.map((column) => (
-              <th
-                key={String(column.key)}
-                className="h-12 px-4 text-left align-middle font-medium"
-              >
-                {column.sortable !== false ? (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="-ml-4 h-8 data-[state=open]:bg-accent"
-                    onClick={() => handleSort(column.key)}
-                  >
-                    {column.header}
-                    {getSortIcon(column.key)}
-                  </Button>
-                ) : (
-                  column.header
-                )}
-              </th>
-            ))}
+            {columns.map((column) => {
+              return (
+                <th
+                  key={String(column.key)}
+                  className="h-12 px-4 text-left align-middle font-medium"
+                >
+                  {column.sortable !== false ? (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="-ml-4 h-8 data-[state=open]:bg-accent"
+                      onClick={() => handleSort(column.key)}
+                    >
+                      {column.header}
+                      {getSortIcon(column.key)}
+                    </Button>
+                  ) : (
+                    column.header
+                  )}
+                </th>
+              )
+            })}
           </tr>
         </thead>
         <tbody>
@@ -121,27 +123,31 @@ export function DataTable<T extends Record<string, any>>({
               </td>
             </tr>
           ) : (
-            sortedData.map((row) => (
-              <tr
-                key={keyExtractor(row)}
-                className={`border-b transition-colors ${
-                  onRowClick ? "cursor-pointer hover:bg-muted/50" : ""
-                }`}
-                onClick={() => onRowClick?.(row)}
-              >
-                {columns.map((column) => (
-                  <td key={String(column.key)} className="p-4 align-middle">
-                    {column.render
+            sortedData.map((row) => {
+              return (
+                <tr
+                  key={keyExtractor(row)}
+                  className={`border-b transition-colors ${
+                    onRowClick ? "cursor-pointer hover:bg-muted/50" : ""
+                  }`}
+                  onClick={() => onRowClick?.(row)}
+                >
+                  {columns.map((column) => {
+                    const cellValue = column.render
                       ? column.render(row[column.key], row)
-                      : String(row[column.key] ?? "-")}
-                  </td>
-                ))}
-              </tr>
-            ))}
+                      : String(row[column.key] ?? "-")
+                    return (
+                      <td key={String(column.key)} className="p-4 align-middle">
+                        {cellValue}
+                      </td>
+                    )
+                  })}
+                </tr>
+              )
+            })
           )}
         </tbody>
       </table>
     </div>
   )
 }
-
