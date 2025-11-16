@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import { db } from "@/db"
 import { activityLogs, users } from "@/db/schema"
-import { checkPermission } from "@/lib/permissions"
 import { eq, desc, and } from "drizzle-orm"
 
 export async function GET(request: NextRequest) {
@@ -16,11 +15,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const canViewActivity = await checkPermission(user.id, "activity", "read")
-    if (!canViewActivity) {
-      // Allow users to view their own activity
-      // For now, we'll allow it - you can restrict this later
-    }
+    // All authenticated users can view activity logs
+    // You can add permission checks here later if needed
 
     const searchParams = request.nextUrl.searchParams
     const entityType = searchParams.get("entityType")
