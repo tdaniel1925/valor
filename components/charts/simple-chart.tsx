@@ -55,11 +55,17 @@ export function SimpleChart({
             <Tooltip />
             <Legend />
             {dataKeys.map((key, index) => {
-              const ChartElement = type === "line" ? Line : Bar
-              return (
-                <ChartElement
+              return type === "line" ? (
+                <Line
                   key={key}
-                  type={type === "line" ? "monotone" : undefined}
+                  type="monotone"
+                  dataKey={key}
+                  stroke={colors[index % colors.length]}
+                  fill={colors[index % colors.length]}
+                />
+              ) : (
+                <Bar
+                  key={key}
                   dataKey={key}
                   stroke={colors[index % colors.length]}
                   fill={colors[index % colors.length]}
