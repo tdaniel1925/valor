@@ -28,11 +28,12 @@ export function DateRangeFilter({ onDateRangeChange, className }: DateRangeFilte
   })
 
   const handleDateSelect = (
-    range: { from: Date | undefined; to: Date | undefined } | undefined
+    range: { from?: Date; to?: Date } | undefined
   ) => {
     if (range) {
-      setDateRange(range)
-      onDateRangeChange(range)
+      const normalizedRange = { from: range.from, to: range.to }
+      setDateRange(normalizedRange)
+      onDateRangeChange(normalizedRange)
     } else {
       const cleared = { from: undefined, to: undefined }
       setDateRange(cleared)
