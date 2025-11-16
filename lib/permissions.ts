@@ -12,6 +12,7 @@ export type PermissionResource =
   | "reports"
   | "users"
   | "organizations"
+  | "activity"
 
 export async function getUserPermissions(userId: string): Promise<Set<string>> {
   const userWithRoles = await db
