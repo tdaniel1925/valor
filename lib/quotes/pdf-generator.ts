@@ -33,7 +33,7 @@ export async function saveQuotePDF(
 
   const fileName = `quotes/${quoteId}/${Date.now()}.pdf`
   // Convert Buffer to Blob for uploadFile
-  const pdfBlob = new Blob([pdfBuffer], { type: "application/pdf" })
+  const pdfBlob = new Blob([pdfBuffer.buffer], { type: "application/pdf" })
   await uploadFile(STORAGE_BUCKETS.quotes, fileName, pdfBlob, {
     contentType: "application/pdf",
   })
