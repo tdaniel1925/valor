@@ -9,9 +9,10 @@ import { handleApiError } from "@/lib/api/error-handler"
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const supabase = await createClient()
     const {
       data: { user },
@@ -49,7 +50,7 @@ export async function PATCH(
         status: status as any,
         updatedAt: new Date(),
       })
-      .where(eq(cases.id, params.id))
+      .where(eq(cases.id, id))
       .returning()
 
     if (!updatedCase) {
@@ -57,7 +58,7 @@ export async function PATCH(
     }
 
     // Log activity
-    await logCaseUpdated(user.id, params.id, {
+    await logCaseUpdated(user.id, id, {
       statusChanged: true,
       newStatus: status,
     })

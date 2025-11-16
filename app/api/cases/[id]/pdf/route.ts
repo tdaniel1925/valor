@@ -10,9 +10,10 @@ import { handleApiError } from "@/lib/api/error-handler"
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const supabase = await createClient()
     const {
       data: { user },
@@ -28,7 +29,7 @@ export async function GET(
     const [caseItem] = await db
       .select()
       .from(cases)
-      .where(eq(cases.id, params.id))
+      .where(eq(cases.id, id))
 
     if (!caseItem) {
       return createErrorResponse("Case not found", 404)

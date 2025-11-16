@@ -7,9 +7,10 @@ import { eq } from "drizzle-orm"
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const supabase = await createClient()
     const {
       data: { user },
@@ -39,7 +40,7 @@ export async function GET(
       })
       .from(notes)
       .innerJoin(users, eq(notes.userId, users.id))
-      .where(eq(notes.caseId, params.id))
+      .where(eq(notes.caseId, id))
       .orderBy(notes.createdAt)
 
     return NextResponse.json(allNotes)
@@ -54,9 +55,10 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const supabase = await createClient()
     const {
       data: { user },
@@ -75,7 +77,7 @@ export async function POST(
     const [caseItem] = await db
       .select()
       .from(cases)
-      .where(eq(cases.id, params.id))
+      .where(eq(cases.id, id))
       .limit(1)
 
     if (!caseItem) {
@@ -99,7 +101,7 @@ export async function POST(
     const [newNote] = await db
       .insert(notes)
       .values({
-        caseId: params.id,
+        caseId: id,
         userId: dbUser.id,
         content,
         isInternal: isInternal || false,

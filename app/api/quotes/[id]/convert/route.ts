@@ -10,9 +10,10 @@ import { handleApiError } from "@/lib/api/error-handler"
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const supabase = await createClient()
     const {
       data: { user },
@@ -28,7 +29,7 @@ export async function POST(
     const [quote] = await db
       .select()
       .from(quotes)
-      .where(eq(quotes.id, params.id))
+      .where(eq(quotes.id, id))
 
     if (!quote) {
       return createErrorResponse("Quote not found", 404)
@@ -55,12 +56,12 @@ export async function POST(
       .returning()
 
     // Log activities
-    await logQuoteConverted(user.id, params.id, newCase.id)
+    await logQuoteConverted(user.id, id, newCase.id)
     await logCaseCreated(user.id, newCase.id)
 
     return createSuccessResponse({
       case: newCase,
-      quoteId: params.id,
+      quoteId: id,
     })
   } catch (error) {
     return handleApiError(error)

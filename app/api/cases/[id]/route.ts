@@ -8,9 +8,10 @@ import { logCaseUpdated } from "@/lib/activity-log"
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const supabase = await createClient()
     const {
       data: { user },
@@ -28,7 +29,7 @@ export async function GET(
     const [caseItem] = await db
       .select()
       .from(cases)
-      .where(eq(cases.id, params.id))
+      .where(eq(cases.id, id))
       .limit(1)
 
     if (!caseItem) {
@@ -47,9 +48,10 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const supabase = await createClient()
     const {
       data: { user },
@@ -71,7 +73,7 @@ export async function PATCH(
     const [existingCase] = await db
       .select()
       .from(cases)
-      .where(eq(cases.id, params.id))
+      .where(eq(cases.id, id))
       .limit(1)
 
     if (!existingCase) {
@@ -90,7 +92,7 @@ export async function PATCH(
         premium,
         updatedAt: new Date(),
       })
-      .where(eq(cases.id, params.id))
+      .where(eq(cases.id, id))
       .returning()
 
     // Log activity
@@ -100,7 +102,7 @@ export async function PATCH(
     
     const ipAddress = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || undefined
     const userAgent = request.headers.get("user-agent") || undefined
-    await logCaseUpdated(user.id, params.id, changes, ipAddress, userAgent)
+    await logCaseUpdated(user.id, id, changes, ipAddress, userAgent)
 
     return NextResponse.json(updatedCase)
   } catch (error: any) {
@@ -114,9 +116,10 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const supabase = await createClient()
     const {
       data: { user },
@@ -131,7 +134,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
 
-    await db.delete(cases).where(eq(cases.id, params.id))
+    await db.delete(cases).where(eq(cases.id, id))
 
     return NextResponse.json({ success: true })
   } catch (error: any) {

@@ -10,9 +10,10 @@ import { handleApiError } from "@/lib/api/error-handler"
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const supabase = await createClient()
     const {
       data: { user },
@@ -28,7 +29,7 @@ export async function GET(
     const [quote] = await db
       .select()
       .from(quotes)
-      .where(eq(quotes.id, params.id))
+      .where(eq(quotes.id, id))
 
     if (!quote) {
       return createErrorResponse("Quote not found", 404)
