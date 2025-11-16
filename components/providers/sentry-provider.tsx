@@ -1,19 +1,9 @@
 "use client"
 
-import { useEffect } from "react"
-import * as Sentry from "@sentry/nextjs"
-import { usePathname, useSearchParams } from "next/navigation"
+// Sentry is currently disabled
+// To enable: npm install @sentry/nextjs and configure in sentry.*.config.ts files
 
 export function SentryProvider({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-
-  useEffect(() => {
-    if (pathname) {
-      Sentry.setTag("page", pathname)
-    }
-  }, [pathname, searchParams])
-
   return <>{children}</>
 }
 

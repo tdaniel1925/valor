@@ -30,27 +30,27 @@ export function ActivityFeed({ entityType, entityId, limit = 10 }: ActivityFeedP
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchActivities()
-  }, [entityType, entityId])
+    const fetchActivities = async () => {
+      try {
+        const params = new URLSearchParams()
+        if (entityType) params.append("entityType", entityType)
+        if (entityId) params.append("entityId", entityId)
+        if (limit) params.append("limit", limit.toString())
 
-  const fetchActivities = async () => {
-    try {
-      const params = new URLSearchParams()
-      if (entityType) params.append("entityType", entityType)
-      if (entityId) params.append("entityId", entityId)
-      if (limit) params.append("limit", limit.toString())
-
-      const response = await fetch(`/api/activity?${params.toString()}`)
-      if (response.ok) {
-        const data = await response.json()
-        setActivities(data)
+        const response = await fetch(`/api/activity?${params.toString()}`)
+        if (response.ok) {
+          const data = await response.json()
+          setActivities(data)
+        }
+      } catch (error) {
+        console.error("Failed to fetch activities:", error)
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      console.error("Failed to fetch activities:", error)
-    } finally {
-      setLoading(false)
     }
-  }
+
+    fetchActivities()
+  }, [entityType, entityId, limit])
 
   if (loading) {
     return (

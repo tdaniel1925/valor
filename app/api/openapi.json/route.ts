@@ -18,15 +18,6 @@ const openApiSpec = {
       description: "Development server",
     },
   ],
-  components: {
-    securitySchemes: {
-      bearerAuth: {
-        type: "http",
-        scheme: "bearer",
-        bearerFormat: "JWT",
-      },
-    },
-  },
   paths: {
     "/api/health": {
       get: {
@@ -190,6 +181,13 @@ const openApiSpec = {
     },
   },
   components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+      },
+    },
     schemas: {
       Case: {
         type: "object",

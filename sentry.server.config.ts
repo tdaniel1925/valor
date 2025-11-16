@@ -1,15 +1,16 @@
-// Sentry server configuration
+// Sentry server configuration - DISABLED
+// To enable Sentry: npm install @sentry/nextjs and uncomment below
 
-import * as Sentry from "@sentry/nextjs"
-
-const SENTRY_DSN = process.env.NEXT_PUBLIC_SENTRY_DSN
-const SENTRY_ENVIRONMENT = process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT || process.env.NODE_ENV
-
-if (SENTRY_DSN) {
-  Sentry.init({
-    dsn: SENTRY_DSN,
-    environment: SENTRY_ENVIRONMENT,
-    tracesSampleRate: SENTRY_ENVIRONMENT === "production" ? 0.1 : 1.0,
-    debug: SENTRY_ENVIRONMENT === "development",
-  })
-}
+// import * as Sentry from "@sentry/nextjs"
+//
+// const SENTRY_DSN = process.env.NEXT_PUBLIC_SENTRY_DSN
+// const SENTRY_ENVIRONMENT = process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT || process.env.NODE_ENV
+//
+// if (SENTRY_DSN) {
+//   Sentry.init({
+//     dsn: SENTRY_DSN,
+//     environment: SENTRY_ENVIRONMENT,
+//     tracesSampleRate: SENTRY_ENVIRONMENT === "production" ? 0.1 : 1.0,
+//     debug: SENTRY_ENVIRONMENT === "development",
+//   })
+// }

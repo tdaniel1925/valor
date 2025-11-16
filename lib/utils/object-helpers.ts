@@ -5,8 +5,18 @@
  */
 export function deepClone<T>(obj: T): T {
   if (obj === null || typeof obj !== "object") return obj
-  if (obj instanceof Date) return new Date(obj.getTime()) as any
-  if (obj instanceof Array) return obj.map((item) => deepClone(item)) as any
+
+  // Check for Date
+  if (obj !== null && typeof obj === "object" && obj instanceof Date) {
+    return new Date(obj.getTime()) as any
+  }
+
+  // Check for Array
+  if (obj !== null && typeof obj === "object" && obj instanceof Array) {
+    return obj.map((item) => deepClone(item)) as any
+  }
+
+  // Handle plain objects
   if (typeof obj === "object") {
     const clonedObj = {} as T
     for (const key in obj) {
@@ -16,6 +26,7 @@ export function deepClone<T>(obj: T): T {
     }
     return clonedObj
   }
+
   return obj
 }
 

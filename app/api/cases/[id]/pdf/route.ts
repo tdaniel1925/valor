@@ -5,7 +5,7 @@ import { cases } from "@/db/schema"
 import { eq } from "drizzle-orm"
 import { ensureUserExists } from "@/lib/user-helpers"
 import { generateCasePDF } from "@/lib/pdf/pdf-generator"
-import { createSuccessResponse, createErrorResponse } from "@/lib/api/response"
+import { errorResponse } from "@/lib/api/response"
 import { handleApiError } from "@/lib/api/error-handler"
 
 export async function GET(
@@ -19,7 +19,7 @@ export async function GET(
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return createErrorResponse("Unauthorized", 401)
+      return errorResponse("Unauthorized", undefined, undefined, 401)
     }
 
     const dbUser = await ensureUserExists(user.id, user.email!)
@@ -31,12 +31,12 @@ export async function GET(
       .where(eq(cases.id, params.id))
 
     if (!caseItem) {
-      return createErrorResponse("Case not found", 404)
+      return errorResponse("Case not found", undefined, undefined, 404)
     }
 
     // Check ownership
     if (caseItem.agentId !== dbUser.id) {
-      return createErrorResponse("Forbidden", 403)
+      return errorResponse("Forbidden", undefined, undefined, 403)
     }
 
     // Extract client data
@@ -58,7 +58,7 @@ export async function GET(
     })
 
     // Return PDF
-    return new NextResponse(pdfBuffer, {
+    return new NextResponse(new Uint8Array(pdfBuffer), {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename="case-${caseItem.caseNumber || caseItem.id}.pdf"`,
