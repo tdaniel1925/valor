@@ -133,7 +133,7 @@ export function DataTable<T extends Record<string, any>>({
                   <td key={String(column.key)} className="p-4 align-middle">
                     {column.render
                       ? column.render(row[column.key], row)
-                      : String(row[column.key] ?? "—")}
+                      : String(row[column.key] ?? "-")}
                   </td>
                 ))}
               </tr>

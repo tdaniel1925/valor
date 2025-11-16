@@ -22,7 +22,7 @@ export default async function CommissionsPage() {
       <div className="container py-10">
         <h1 className="text-2xl font-bold">Access Denied</h1>
         <p className="mt-2 text-muted-foreground">
-          You don't have permission to view commissions.
+          You don&apos;t have permission to view commissions.
         </p>
       </div>
     )

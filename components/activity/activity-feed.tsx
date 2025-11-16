@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { formatDateTime } from "@/lib/utils/format"
 import { Activity } from "lucide-react"
@@ -29,11 +29,7 @@ export function ActivityFeed({ entityType, entityId, limit = 10 }: ActivityFeedP
   const [activities, setActivities] = useState<ActivityItem[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    fetchActivities()
-  }, [entityType, entityId])
-
-  const fetchActivities = async () => {
+  const fetchActivities = useCallback(async () => {
     try {
       const params = new URLSearchParams()
       if (entityType) params.append("entityType", entityType)
@@ -50,7 +46,11 @@ export function ActivityFeed({ entityType, entityId, limit = 10 }: ActivityFeedP
     } finally {
       setLoading(false)
     }
-  }
+  }, [entityType, entityId, limit])
+
+  useEffect(() => {
+    fetchActivities()
+  }, [fetchActivities])
 
   if (loading) {
     return (

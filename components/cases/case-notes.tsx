@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
@@ -35,11 +35,7 @@ export function CaseNotes({ caseId }: CaseNotesProps) {
   })
   const [submitting, setSubmitting] = useState(false)
 
-  useEffect(() => {
-    fetchNotes()
-  }, [caseId])
-
-  const fetchNotes = async () => {
+  const fetchNotes = useCallback(async () => {
     try {
       const response = await fetch(`/api/cases/${caseId}/notes`)
       if (response.ok) {
@@ -51,7 +47,11 @@ export function CaseNotes({ caseId }: CaseNotesProps) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [caseId])
+
+  useEffect(() => {
+    fetchNotes()
+  }, [fetchNotes])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

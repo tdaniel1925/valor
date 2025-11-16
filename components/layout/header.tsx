@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { MobileNav } from "./mobile-nav"
 import { ThemeToggle } from "@/components/theme/theme-toggle"
@@ -21,36 +22,36 @@ export function Header() {
       <div className="container flex h-14 items-center">
         <MobileNav />
         <div className="mr-4 flex">
-          <a className="mr-6 flex items-center space-x-2" href="/dashboard">
+          <Link className="mr-6 flex items-center space-x-2" href="/dashboard">
             <span className="font-bold">Valor Financial Specialists</span>
-          </a>
+          </Link>
         </div>
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
           <nav className="flex items-center space-x-6">
-            <a
+            <Link
               href="/dashboard"
               className="text-sm font-medium transition-colors hover:text-primary"
             >
               Dashboard
-            </a>
-            <a
+            </Link>
+            <Link
               href="/quotes"
               className="text-sm font-medium transition-colors hover:text-primary"
             >
               Quotes
-            </a>
-            <a
+            </Link>
+            <Link
               href="/cases"
               className="text-sm font-medium transition-colors hover:text-primary"
             >
               Cases
-            </a>
-            <a
+            </Link>
+            <Link
               href="/contracts"
               className="text-sm font-medium transition-colors hover:text-primary"
             >
               Contracts
-            </a>
+            </Link>
             <ThemeToggle />
             <Button variant="ghost" onClick={handleSignOut}>
               Sign Out
