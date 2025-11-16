@@ -57,8 +57,8 @@ export async function GET(
         : "N/A",
     })
 
-    // Return PDF
-    return new NextResponse(pdfBuffer, {
+    // Return PDF - convert Buffer to Uint8Array for NextResponse
+    return new NextResponse(new Uint8Array(pdfBuffer), {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename="case-${caseItem.caseNumber || caseItem.id}.pdf"`,

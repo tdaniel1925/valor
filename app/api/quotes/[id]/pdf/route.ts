@@ -56,8 +56,8 @@ export async function GET(
       effectiveDate: new Date(quote.createdAt).toLocaleDateString(),
     })
 
-    // Return PDF
-    return new NextResponse(pdfBuffer, {
+    // Return PDF - convert Buffer to Uint8Array for NextResponse
+    return new NextResponse(new Uint8Array(pdfBuffer), {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename="quote-${quote.quoteNumber || quote.id}.pdf"`,
