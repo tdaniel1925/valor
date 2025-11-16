@@ -64,9 +64,9 @@ export function DataTable<T extends Record<string, any>>({
       return sortDirection === "asc" ? aValue - bValue : bValue - aValue
     }
 
-    // Type guard for Date objects
-    const aIsDate = aValue instanceof Date
-    const bIsDate = bValue instanceof Date
+    // Type guard for Date objects - cast to unknown first for instanceof check
+    const aIsDate = (aValue as unknown) instanceof Date
+    const bIsDate = (bValue as unknown) instanceof Date
     if (aIsDate && bIsDate) {
       return sortDirection === "asc"
         ? (aValue as Date).getTime() - (bValue as Date).getTime()
