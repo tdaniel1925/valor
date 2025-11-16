@@ -27,9 +27,17 @@ export function DateRangeFilter({ onDateRangeChange, className }: DateRangeFilte
     to: undefined,
   })
 
-  const handleDateSelect = (range: { from: Date | undefined; to: Date | undefined }) => {
-    setDateRange(range)
-    onDateRangeChange(range)
+  const handleDateSelect = (
+    range: { from: Date | undefined; to: Date | undefined } | undefined
+  ) => {
+    if (range) {
+      setDateRange(range)
+      onDateRangeChange(range)
+    } else {
+      const cleared = { from: undefined, to: undefined }
+      setDateRange(cleared)
+      onDateRangeChange(cleared)
+    }
   }
 
   return (
