@@ -21,11 +21,7 @@ const statusColors: Record<string, string> = {
   paid: "bg-green-100 text-green-800",
   cancelled: "bg-gray-100 text-gray-800",
   
-  // Contract statuses
-  active: "bg-green-100 text-green-800",
-  inactive: "bg-gray-100 text-gray-800",
-  
-  // User statuses
+  // Contract/User statuses
   active: "bg-green-100 text-green-800",
   inactive: "bg-gray-100 text-gray-800",
 }
