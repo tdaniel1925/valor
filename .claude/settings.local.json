@@ -17,7 +17,8 @@
       "Bash(git add:*)",
       "Bash(git commit -m \"$(cat <<''EOF''\nInitial commit: Valor Financial Specialists Insurance Platform\n\n- Next.js 14 application with TypeScript\n- Supabase authentication and database integration\n- Dashboard with cases, quotes, and commissions tracking\n- Simplified auth flow using Supabase SSR\n- Security headers and middleware configuration\n- Tailwind CSS and shadcn/ui components\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
       "Bash(del nul 2)",
-      "Bash(NUL)"
+      "Bash(NUL)",
+      "Bash(git fetch:*)"
     ],
     "deny": [],
     "ask": []
