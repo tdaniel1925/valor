@@ -27,7 +27,10 @@ export function DateRangeFilter({ onDateRangeChange, className }: DateRangeFilte
 
   const handleDateSelect = (range: DateRange | undefined) => {
     setDateRange(range)
-    onDateRangeChange(range || { from: undefined, to: undefined })
+    onDateRangeChange({
+      from: range?.from,
+      to: range?.to,
+    })
   }
 
   return (
