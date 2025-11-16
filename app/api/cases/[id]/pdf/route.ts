@@ -5,7 +5,7 @@ import { cases } from "@/db/schema"
 import { eq } from "drizzle-orm"
 import { ensureUserExists } from "@/lib/user-helpers"
 import { generateCasePDF } from "@/lib/pdf/pdf-generator"
-import { createSuccessResponse, createErrorResponse } from "@/lib/api/response"
+import { successResponse, errorResponse } from "@/lib/api/response"
 import { handleApiError } from "@/lib/api/error-handler"
 
 export async function GET(
@@ -20,7 +20,7 @@ export async function GET(
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return createErrorResponse("Unauthorized", 401)
+      return errorResponse("Unauthorized", 401)
     }
 
     const dbUser = await ensureUserExists(user.id, user.email!)
@@ -32,12 +32,12 @@ export async function GET(
       .where(eq(cases.id, id))
 
     if (!caseItem) {
-      return createErrorResponse("Case not found", 404)
+      return errorResponse("Case not found", 404)
     }
 
     // Check ownership
     if (caseItem.agentId !== dbUser.id) {
-      return createErrorResponse("Forbidden", 403)
+      return errorResponse("Forbidden", 403)
     }
 
     // Extract client data

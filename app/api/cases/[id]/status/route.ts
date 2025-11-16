@@ -4,7 +4,7 @@ import { db } from "@/db"
 import { cases } from "@/db/schema"
 import { eq } from "drizzle-orm"
 import { logCaseUpdated } from "@/lib/activity-log"
-import { createSuccessResponse, createErrorResponse } from "@/lib/api/response"
+import { successResponse, errorResponse } from "@/lib/api/response"
 import { handleApiError } from "@/lib/api/error-handler"
 
 export async function PATCH(
@@ -19,13 +19,13 @@ export async function PATCH(
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return createErrorResponse("Unauthorized", 401)
+      return errorResponse("Unauthorized", 401)
     }
 
     const { status } = await request.json()
 
     if (!status) {
-      return createErrorResponse("Status is required", 400)
+      return errorResponse("Status is required", 400)
     }
 
     // Validate status
@@ -40,7 +40,7 @@ export async function PATCH(
     ]
 
     if (!validStatuses.includes(status)) {
-      return createErrorResponse("Invalid status", 400)
+      return errorResponse("Invalid status", 400)
     }
 
     // Update case status
@@ -54,7 +54,7 @@ export async function PATCH(
       .returning()
 
     if (!updatedCase) {
-      return createErrorResponse("Case not found", 404)
+      return errorResponse("Case not found", 404)
     }
 
     // Log activity
@@ -63,7 +63,7 @@ export async function PATCH(
       newStatus: status,
     })
 
-    return createSuccessResponse(updatedCase)
+    return successResponse(updatedCase)
   } catch (error) {
     return handleApiError(error)
   }
