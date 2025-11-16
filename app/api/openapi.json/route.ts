@@ -26,6 +26,111 @@ const openApiSpec = {
         bearerFormat: "JWT",
       },
     },
+    schemas: {
+      Case: {
+        type: "object",
+        properties: {
+          id: { type: "string", format: "uuid" },
+          caseNumber: { type: "string" },
+          type: {
+            type: "string",
+            enum: ["life", "term", "annuity", "other"],
+          },
+          status: {
+            type: "string",
+            enum: [
+              "draft",
+              "submitted",
+              "under_review",
+              "approved",
+              "rejected",
+              "pending_requirements",
+              "issued",
+            ],
+          },
+          agentId: { type: "string", format: "uuid" },
+          clientInfo: { type: "object" },
+          carrier: { type: "string" },
+          product: { type: "string" },
+          faceAmount: { type: "string" },
+          premium: { type: "string" },
+          createdAt: { type: "string", format: "date-time" },
+          updatedAt: { type: "string", format: "date-time" },
+        },
+      },
+      CaseInput: {
+        type: "object",
+        required: ["type", "status"],
+        properties: {
+          type: {
+            type: "string",
+            enum: ["life", "term", "annuity", "other"],
+          },
+          status: {
+            type: "string",
+            enum: [
+              "draft",
+              "submitted",
+              "under_review",
+              "approved",
+              "rejected",
+              "pending_requirements",
+              "issued",
+            ],
+          },
+          clientInfo: { type: "object" },
+          carrier: { type: "string" },
+          product: { type: "string" },
+          faceAmount: { type: "string" },
+          premium: { type: "string" },
+        },
+      },
+      Quote: {
+        type: "object",
+        properties: {
+          id: { type: "string", format: "uuid" },
+          quoteNumber: { type: "string" },
+          type: {
+            type: "string",
+            enum: ["life", "term", "annuity"],
+          },
+          agentId: { type: "string", format: "uuid" },
+          carrier: { type: "string" },
+          product: { type: "string" },
+          faceAmount: { type: "string" },
+          premium: { type: "string" },
+          clientData: { type: "object" },
+          createdAt: { type: "string", format: "date-time" },
+        },
+      },
+      QuoteInput: {
+        type: "object",
+        required: ["type"],
+        properties: {
+          type: {
+            type: "string",
+            enum: ["life", "term", "annuity"],
+          },
+          carrier: { type: "string" },
+          product: { type: "string" },
+          faceAmount: { type: "string" },
+          premium: { type: "string" },
+          clientData: { type: "object" },
+        },
+      },
+      Error: {
+        type: "object",
+        properties: {
+          error: {
+            type: "object",
+            properties: {
+              message: { type: "string" },
+              code: { type: "string" },
+            },
+          },
+        },
+      },
+    },
   },
   paths: {
     "/api/health": {
@@ -189,115 +294,8 @@ const openApiSpec = {
       },
     },
   },
-  components: {
-    schemas: {
-      Case: {
-        type: "object",
-        properties: {
-          id: { type: "string", format: "uuid" },
-          caseNumber: { type: "string" },
-          type: {
-            type: "string",
-            enum: ["life", "term", "annuity", "other"],
-          },
-          status: {
-            type: "string",
-            enum: [
-              "draft",
-              "submitted",
-              "under_review",
-              "approved",
-              "rejected",
-              "pending_requirements",
-              "issued",
-            ],
-          },
-          agentId: { type: "string", format: "uuid" },
-          clientInfo: { type: "object" },
-          carrier: { type: "string" },
-          product: { type: "string" },
-          faceAmount: { type: "string" },
-          premium: { type: "string" },
-          createdAt: { type: "string", format: "date-time" },
-          updatedAt: { type: "string", format: "date-time" },
-        },
-      },
-      CaseInput: {
-        type: "object",
-        required: ["type", "status"],
-        properties: {
-          type: {
-            type: "string",
-            enum: ["life", "term", "annuity", "other"],
-          },
-          status: {
-            type: "string",
-            enum: [
-              "draft",
-              "submitted",
-              "under_review",
-              "approved",
-              "rejected",
-              "pending_requirements",
-              "issued",
-            ],
-          },
-          clientInfo: { type: "object" },
-          carrier: { type: "string" },
-          product: { type: "string" },
-          faceAmount: { type: "string" },
-          premium: { type: "string" },
-        },
-      },
-      Quote: {
-        type: "object",
-        properties: {
-          id: { type: "string", format: "uuid" },
-          quoteNumber: { type: "string" },
-          type: {
-            type: "string",
-            enum: ["life", "term", "annuity"],
-          },
-          agentId: { type: "string", format: "uuid" },
-          carrier: { type: "string" },
-          product: { type: "string" },
-          faceAmount: { type: "string" },
-          premium: { type: "string" },
-          clientData: { type: "object" },
-          createdAt: { type: "string", format: "date-time" },
-        },
-      },
-      QuoteInput: {
-        type: "object",
-        required: ["type"],
-        properties: {
-          type: {
-            type: "string",
-            enum: ["life", "term", "annuity"],
-          },
-          carrier: { type: "string" },
-          product: { type: "string" },
-          faceAmount: { type: "string" },
-          premium: { type: "string" },
-          clientData: { type: "object" },
-        },
-      },
-      Error: {
-        type: "object",
-        properties: {
-          error: {
-            type: "object",
-            properties: {
-              message: { type: "string" },
-              code: { type: "string" },
-            },
-          },
-        },
-      },
-    },
-  },
-}
 
+}
 export async function GET() {
   return NextResponse.json(openApiSpec)
 }
