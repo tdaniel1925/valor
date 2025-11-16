@@ -5,39 +5,27 @@ import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import Link from "next/link"
+import { loginAction } from "./actions"
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const router = useRouter()
   const searchParams = useSearchParams()
   const supabase = createClient()
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleLogin = async (formData: FormData) => {
     setError(null)
     setLoading(true)
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
+    const result = await loginAction(formData)
 
-    if (error) {
-      setError(error.message)
+    if (result?.error) {
+      setError(result.error)
       setLoading(false)
-    } else if (data.user) {
-      // Get redirect path
-      const redirectTo = searchParams.get("redirectedFrom") || "/dashboard"
-
-      // Use Next.js router for proper navigation and cookie handling
-      router.push(redirectTo)
-      router.refresh() // Refresh server components to pick up new auth state
     }
+    // If successful, the server action will redirect to dashboard
   }
 
   const handleGoogleLogin = async () => {
@@ -70,7 +58,7 @@ export default function LoginPage() {
             Valor Financial Specialists
           </p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleLogin}>
+        <form className="mt-8 space-y-6" action={handleLogin}>
           {error && (
             <div className="rounded-md bg-red-50 p-4">
               <p className="text-sm text-red-800">{error}</p>
@@ -85,8 +73,6 @@ export default function LoginPage() {
                 type="email"
                 autoComplete="email"
                 required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
                 className="mt-1 bg-white text-gray-900"
                 placeholder="Enter your email"
               />
@@ -99,8 +85,6 @@ export default function LoginPage() {
                 type="password"
                 autoComplete="current-password"
                 required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 className="mt-1 bg-white text-gray-900"
                 placeholder="Enter your password"
               />
