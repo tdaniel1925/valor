@@ -68,8 +68,8 @@ export function handleApiError(error: unknown): NextResponse {
   )
 }
 
-export async function withErrorHandling<T>(
-  handler: () => Promise<T>
+export async function withErrorHandling(
+  handler: () => Promise<NextResponse>
 ): Promise<NextResponse> {
   try {
     const result = await handler()
