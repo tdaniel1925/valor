@@ -17,18 +17,18 @@ export async function PATCH(request: NextRequest) {
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return errorResponse("Unauthorized", 401)
+      return errorResponse("Unauthorized", "Unauthorized access", "UNAUTHORIZED", 401)
     }
 
     const dbUser = await ensureUserExists(user.id, user.email!)
     const { caseIds, updates } = await request.json()
 
     if (!caseIds || !Array.isArray(caseIds) || caseIds.length === 0) {
-      return errorResponse("caseIds array is required", 400)
+      return errorResponse("Bad Request", "caseIds array is required", "BAD_REQUEST", 400)
     }
 
     if (!updates || typeof updates !== "object") {
-      return errorResponse("updates object is required", 400)
+      return errorResponse("Bad Request", "updates object is required", "BAD_REQUEST", 400)
     }
 
     // Validate all cases belong to user
@@ -42,7 +42,7 @@ export async function PATCH(request: NextRequest) {
       .filter((id) => caseIds.includes(id))
 
     if (validCaseIds.length === 0) {
-      return errorResponse("No valid cases found", 404)
+      return errorResponse("Not Found", "No valid cases found", "NOT_FOUND", 404)
     }
 
     // Process updates in batches
@@ -86,14 +86,14 @@ export async function DELETE(request: NextRequest) {
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return errorResponse("Unauthorized", 401)
+      return errorResponse("Unauthorized", "Unauthorized access", "UNAUTHORIZED", 401)
     }
 
     const dbUser = await ensureUserExists(user.id, user.email!)
     const { caseIds } = await request.json()
 
     if (!caseIds || !Array.isArray(caseIds) || caseIds.length === 0) {
-      return errorResponse("caseIds array is required", 400)
+      return errorResponse("Bad Request", "caseIds array is required", "BAD_REQUEST", 400)
     }
 
     // Validate all cases belong to user
@@ -107,7 +107,7 @@ export async function DELETE(request: NextRequest) {
       .filter((id) => caseIds.includes(id))
 
     if (validCaseIds.length === 0) {
-      return errorResponse("No valid cases found", 404)
+      return errorResponse("Not Found", "No valid cases found", "NOT_FOUND", 404)
     }
 
     // Delete cases in batches

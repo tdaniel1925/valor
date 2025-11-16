@@ -19,13 +19,13 @@ export async function PATCH(
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return errorResponse("Unauthorized", 401)
+      return errorResponse("Unauthorized", "Unauthorized access", "UNAUTHORIZED", 401)
     }
 
     const { status } = await request.json()
 
     if (!status) {
-      return errorResponse("Status is required", 400)
+      return errorResponse("Bad Request", "Status is required", "BAD_REQUEST", 400)
     }
 
     // Validate status
@@ -40,7 +40,7 @@ export async function PATCH(
     ]
 
     if (!validStatuses.includes(status)) {
-      return errorResponse("Invalid status", 400)
+      return errorResponse("Bad Request", "Invalid status", "BAD_REQUEST", 400)
     }
 
     // Update case status
@@ -54,7 +54,7 @@ export async function PATCH(
       .returning()
 
     if (!updatedCase) {
-      return errorResponse("Case not found", 404)
+      return errorResponse("Not Found", "Case not found", "NOT_FOUND", 404)
     }
 
     // Log activity

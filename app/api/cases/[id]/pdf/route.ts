@@ -20,7 +20,7 @@ export async function GET(
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return errorResponse("Unauthorized", 401)
+      return errorResponse("Unauthorized", "Unauthorized access", "UNAUTHORIZED", 401)
     }
 
     const dbUser = await ensureUserExists(user.id, user.email!)
@@ -32,12 +32,12 @@ export async function GET(
       .where(eq(cases.id, id))
 
     if (!caseItem) {
-      return errorResponse("Case not found", 404)
+      return errorResponse("Not Found", "Case not found", "NOT_FOUND", 404)
     }
 
     // Check ownership
     if (caseItem.agentId !== dbUser.id) {
-      return errorResponse("Forbidden", 403)
+      return errorResponse("Forbidden", "Access forbidden", "FORBIDDEN", 403)
     }
 
     // Extract client data
